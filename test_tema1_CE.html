@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<title>Test Tema 1 · Constitución Española</title>
+<style>
+:root{
+  --bg:#f3f4fb; --surface:#ffffff; --surface-2:#f7f8fd; --text:#1b1f3b; --muted:#667085;
+  --border:#e4e7f2; --primary:#4f46e5; --primary-2:#7c3aed; --primary-soft:#eef0ff;
+  --ok:#16a34a; --ok-soft:#e7f8ee; --bad:#dc2626; --bad-soft:#fdecec; --warn:#d97706; --warn-soft:#fff4e0;
+  --shadow:0 10px 30px rgba(35,40,90,.08); --shadow-sm:0 2px 8px rgba(35,40,90,.06); --radius:18px;
+}
+[data-theme="dark"]{
+  --bg:#0f1224; --surface:#181c34; --surface-2:#1e2342; --text:#e8eaff; --muted:#9aa1c7;
+  --border:#2a3058; --primary:#7c7bff; --primary-2:#a78bfa; --primary-soft:#242a55;
+  --ok:#34d399; --ok-soft:#10352b; --bad:#f87171; --bad-soft:#3a1c24; --warn:#fbbf24; --warn-soft:#3a2f14;
+  --shadow:0 10px 30px rgba(0,0,0,.35); --shadow-sm:0 2px 8px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;min-height:100vh;transition:background .25s,color .25s}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.hidden{display:none!important}
+
+/* Header */
+.topbar{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 4px 18px rgba(79,70,229,.3);padding-top:env(safe-area-inset-top)}
+.topbar-in{max-width:860px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand .logo{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:20px;flex:none}
+.brand h1{font-size:1rem;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand>div:last-child{min-width:0}
+.brand small{opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.75rem;display:block}
+.icon-btn{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.18);color:#fff;display:grid;place-items:center;font-size:18px;transition:background .15s}
+.icon-btn:hover{background:rgba(255,255,255,.3)}
+.progress-wrap{height:5px;background:rgba(255,255,255,.25)}
+.progress-bar{height:100%;width:0;background:#fff;transition:width .3s}
+
+main{max-width:860px;margin:0 auto;padding:20px 16px 120px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+@media(max-width:560px){.card{padding:18px}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:600;font-size:.95rem;border:1.5px solid var(--border);background:var(--surface);transition:transform .08s,box-shadow .15s,background .15s,border-color .15s}
+.btn:hover{border-color:var(--primary);box-shadow:var(--shadow-sm)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;border-color:transparent}
+.btn.primary:hover{box-shadow:0 8px 20px rgba(79,70,229,.35)}
+.btn.ok{background:var(--ok);color:#fff;border-color:transparent}
+.btn.ghost{background:var(--primary-soft);color:var(--primary);border-color:transparent}
+.btn.lg{padding:15px 26px;font-size:1.05rem;border-radius:14px}
+.btn.block{width:100%}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--primary) 55%,transparent);outline-offset:2px}
+
+/* Start */
+.hero{text-align:center;padding:10px 0 22px}
+.hero .emoji{font-size:48px}
+.hero h2{margin:8px 0 6px;font-size:1.6rem}
+.hero p{margin:0;color:var(--muted)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.stat{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:1.5rem}
+.stat span{font-size:.78rem;color:var(--muted)}
+.field{margin:18px 0}
+.field label.t{display:block;font-weight:600;margin-bottom:8px;font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 16px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);font-weight:600;font-size:.9rem;transition:all .15s}
+.chip.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.switch{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;cursor:pointer;user-select:none}
+.switch input{width:20px;height:20px;accent-color:var(--primary)}
+.resume{background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);border-radius:14px;padding:14px;margin-bottom:18px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.range-input{width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font:inherit}
+
+/* Question */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:700;font-size:.82rem}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.bad{background:var(--bad-soft);color:var(--bad)}
+.badge.muted{background:var(--surface-2);color:var(--muted);font-weight:600}
+.question{font-size:1.2rem;line-height:1.45;font-weight:650;margin:0 0 18px}
+@media(max-width:560px){.question{font-size:1.07rem}}
+.options{display:grid;gap:10px}
+.option{display:flex;align-items:flex-start;gap:12px;text-align:left;padding:13px 14px;border-radius:14px;border:2px solid var(--border);background:var(--surface);transition:border-color .15s,background .15s,transform .08s;width:100%}
+.option:hover:not(:disabled){border-color:var(--primary);background:var(--primary-soft)}
+.option:active:not(:disabled){transform:scale(.99)}
+.option .letter{flex:none;width:30px;height:30px;border-radius:9px;background:var(--surface-2);border:1px solid var(--border);display:grid;place-items:center;font-weight:700;font-size:.85rem;transition:all .15s}
+.option .txt{flex:1;padding-top:3px;overflow-wrap:anywhere}
+.option .mark{flex:none;font-size:1.1rem;padding-top:2px;width:22px;text-align:center}
+.option.sel{border-color:var(--primary);background:var(--primary-soft)}
+.option.sel .letter{background:var(--primary);border-color:var(--primary);color:#fff}
+.option.correct{border-color:var(--ok);background:var(--ok-soft)}
+.option.correct .letter{background:var(--ok);border-color:var(--ok);color:#fff}
+.option.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.option.wrong .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+.option:disabled{cursor:default;color:var(--text)}
+.option.dim{opacity:.6}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.actions .btn{flex:1 1 190px}
+.feedback{margin-top:16px;padding:12px 14px;border-radius:12px;font-weight:600;display:flex;gap:10px;align-items:center}
+.feedback.ok{background:var(--ok-soft);color:var(--ok)}
+.feedback.bad{background:var(--bad-soft);color:var(--bad)}
+.feedback.warn{background:var(--warn-soft);color:var(--warn)}
+.just{margin-top:14px;border:1px solid var(--border);border-left:5px solid var(--primary);background:var(--surface-2);border-radius:12px;padding:14px 16px;animation:fade .25s}
+.just h4{margin:0 0 6px;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;color:var(--primary)}
+.just p{margin:0}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* Bottom nav */
+.bottombar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.bottombar-in{max-width:860px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bottombar .btn{flex:1}
+.bottombar .nav-mid{flex:none;min-width:84px}
+.fin-link{margin-top:14px;text-align:center}
+
+/* Navigator modal */
+.overlay{position:fixed;inset:0;background:rgba(10,12,30,.55);z-index:40;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{background:var(--surface);width:100%;max-width:640px;max-height:82vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+@media(min-width:700px){.overlay{align-items:center}.sheet{border-radius:22px}}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sheet-h h3{margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px}
+.bubble{height:44px;border-radius:12px;border:2px solid var(--border);background:var(--surface-2);font-weight:700;font-size:.9rem;position:relative}
+.bubble.answered{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.bubble.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.bubble.bad{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.bubble.cur{box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 45%,transparent)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;font-size:.78rem;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px;border:2px solid var(--border)}
+
+/* Results */
+.res-top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.donut{position:relative;width:180px;max-width:100%;aspect-ratio:1;margin:6px 0}
+.donut svg{transform:rotate(-90deg);width:100%;height:100%}
+.donut .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.donut .c b{font-size:2.3rem;line-height:1}
+.donut .c span{color:var(--muted);font-size:.8rem}
+.verdict{font-size:1.25rem;font-weight:700;margin:4px 0 0}
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}
+@media(max-width:560px){.stats4{grid-template-columns:repeat(2,1fr)}}
+.stats4 .stat b{font-size:1.6rem}
+.stat.ok b{color:var(--ok)} .stat.bad b{color:var(--bad)} .stat.warn b{color:var(--warn)} .stat.pri b{color:var(--primary)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;margin-top:6px}
+.tab{flex:none;padding:8px 14px;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);font-weight:600;font-size:.85rem}
+.tab.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.rev{border:1px solid var(--border);border-radius:14px;background:var(--surface);margin-bottom:10px;overflow:hidden}
+.rev-h{width:100%;display:flex;gap:12px;align-items:flex-start;text-align:left;padding:14px}
+.rev-h .n{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.rev.ok .n{background:var(--ok-soft);color:var(--ok)}
+.rev.bad .n{background:var(--bad-soft);color:var(--bad)}
+.rev.blank .n{background:var(--warn-soft);color:var(--warn)}
+.rev-h .q{flex:1;font-weight:600;font-size:.95rem}
+.rev-h .chev{flex:none;transition:transform .2s;color:var(--muted)}
+.rev.open .chev{transform:rotate(180deg)}
+.rev-b{padding:0 14px 14px 60px;font-size:.92rem}
+@media(max-width:560px){.rev-b{padding-left:14px}}
+.rev-b .line{margin:4px 0}
+.tag{display:inline-block;padding:2px 9px;border-radius:8px;font-size:.78rem;font-weight:700;margin-right:6px}
+.tag.ok{background:var(--ok-soft);color:var(--ok)} .tag.bad{background:var(--bad-soft);color:var(--bad)} .tag.warn{background:var(--warn-soft);color:var(--warn)}
+.res-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;justify-content:center}
+.res-actions .btn{flex:1 1 200px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:12px;z-index:60;font-weight:600;font-size:.9rem;animation:fade .2s}
+@media print{.topbar,.bottombar,.res-actions,.tabs{display:none}.rev-b{display:block!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="logo">⚖️</div>
+      <div><h1>Test Tema 1 · Constitución Española</h1><small id="subtitle">Cuestionario de preparación</small></div>
+    </div>
+    <button class="icon-btn" id="btnGrid" title="Índice de preguntas" aria-label="Índice de preguntas">▦</button>
+    <button class="icon-btn" id="btnTheme" title="Cambiar tema" aria-label="Cambiar tema">🌙</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+</header>
+
+<main>
+  <!-- INICIO -->
+  <section id="screenStart" class="card">
+    <div class="hero">
+      <div class="emoji">📘</div>
+      <h2>Test Tema 1</h2>
+      <p>Constitución Española · <span id="totalQ"></span> preguntas tipo test con justificación</p>
+    </div>
+
+    <div id="resumeBox" class="resume hidden">
+      <div><b>Tienes un test en curso</b><br><small id="resumeInfo" style="color:var(--muted)"></small></div>
+      <div style="display:flex;gap:8px"><button class="btn primary" id="btnResume">Continuar</button><button class="btn" id="btnDiscard">Descartar</button></div>
+    </div>
+
+    <div class="field">
+      <label class="t">Número de preguntas</label>
+      <div class="chips" id="countChips"></div>
+    </div>
+    <div class="field" id="rangeField">
+      <label class="t">Rango de preguntas (opcional)</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <input class="range-input" type="number" id="rFrom" min="1" placeholder="Desde nº">
+        <input class="range-input" type="number" id="rTo" min="1" placeholder="Hasta nº">
+      </div>
+    </div>
+    <div class="field">
+      <label class="switch"><input type="checkbox" id="optShuffle"><span><b>Orden aleatorio</b><br><small style="color:var(--muted)">Mezcla las preguntas en cada intento</small></span></label>
+    </div>
+    <button class="btn primary lg block" id="btnStart">Comenzar test →</button>
+  </section>
+
+  <!-- PREGUNTA -->
+  <section id="screenQuiz" class="hidden">
+    <div class="card" id="qCard"></div>
+    <div class="fin-link"><button class="btn ghost" id="btnFinish">🏁 Finalizar y ver resultados</button></div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="screenResult" class="hidden">
+    <div class="card">
+      <div class="res-top">
+        <div class="donut" id="donut"></div>
+        <div class="verdict" id="verdict"></div>
+        <div style="color:var(--muted)" id="timeInfo"></div>
+      </div>
+      <div class="stats4" id="stats4"></div>
+      <div class="res-actions">
+        <button class="btn primary" id="btnRetryWrong">🔁 Repetir falladas y en blanco</button>
+        <button class="btn" id="btnReview">👁️ Revisar test</button>
+        <button class="btn" id="btnNew">🆕 Nuevo test</button>
+      </div>
+    </div>
+    <h3 style="margin:26px 4px 6px">Detalle de respuestas</h3>
+    <div class="tabs" id="tabs"></div>
+    <div id="reviewList"></div>
+  </section>
+</main>
+
+<nav class="bottombar hidden" id="bottomBar">
+  <div class="bottombar-in">
+    <button class="btn" id="btnPrev">← Anterior</button>
+    <button class="btn nav-mid ghost" id="btnIndex" aria-label="Abrir índice"><span id="navCount">1/1</span></button>
+    <button class="btn primary" id="btnNext">Siguiente →</button>
+  </div>
+</nav>
+
+<div class="overlay hidden" id="overlay">
+  <div class="sheet" role="dialog" aria-label="Índice de preguntas">
+    <div class="sheet-h"><h3>Índice de preguntas</h3><button class="btn" id="btnCloseSheet">Cerrar</button></div>
+    <div class="grid" id="gridBubbles"></div>
+    <div class="legend">
+      <span><i style="background:var(--surface-2)"></i>Sin responder</span>
+      <span><i style="background:var(--primary-soft);border-color:var(--primary)"></i>Respondida</span>
+      <span><i style="background:var(--ok-soft);border-color:var(--ok)"></i>Acertada</span>
+      <span><i style="background:var(--bad-soft);border-color:var(--bad)"></i>Fallada</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "q": "¿Qué requisitos establece la Constitución para la validez de una ley que limite el ejercicio de un derecho fundamental?", "o": ["Debe ser aprobada por mayoría absoluta del Congreso.", "Debe tener rango de ley orgánica.", "Debe ser aprobada por referéndum.", "Debe contar con el respaldo del Tribunal Constitucional."], "a": 1, "j": "En virtud del artículo 81.1 de la Constitución Española, el desarrollo de los derechos fundamentales y de las libertades públicas está reservado a Ley Orgánica."}, {"id": 2, "q": "¿Qué artículo de la Constitución Española establece que la soberanía reside en el pueblo español?", "o": ["Artículo 1.", "Artículo 2.", "Artículo 3.", "Artículo 4."], "a": 0, "j": "Tal y como dispone el artículo 1.2 CE, la soberanía nacional reside en el pueblo español, del que emanan los poderes del Estado."}, {"id": 3, "q": "¿Cuál de los siguientes principios NO está incluido en el Título Preliminar de la Constitución Española?", "o": ["Estado social y democrático de derecho.", "Indisoluble unidad de la nación española.", "La monarquía como forma política.", "Derecho a la objeción de conciencia."], "a": 3, "j": "La objeción de conciencia se encuentra recogida en el artículo 30.2 CE (Sección 2ª del Capítulo II del Título I)."}, {"id": 4, "q": "¿Cómo se denomina el Título I de la Constitución Española?", "o": ["De los españoles y extranjeros.", "De los derechos y deberes fundamentales.", "De las garantías constitucionales.", "Principios rectores de la política social y económica."], "a": 1, "j": "El Título I de la Constitución Española se denomina “De los derechos y deberes fundamentales”."}, {"id": 5, "q": "Según la Constitución, el castellano es la lengua oficial del Estado. ¿En qué artículo se recoge esta afirmación?", "o": ["Artículo 1.", "Artículo 2.", "Artículo 3.", "Artículo 4."], "a": 2, "j": "El artículo 3 CE dispone que el castellano es la lengua española oficial del Estado."}, {"id": 6, "q": "¿Qué sistema político establece la Constitución Española de 1978?", "o": ["República parlamentaria.", "Monarquía parlamentaria.", "Estado federal.", "Monarquía absolutista."], "a": 1, "j": "La forma política del Estado español es la Monarquía parlamentaria, según el artículo 1 CE."}, {"id": 7, "q": "¿Cuál es el principio que fundamenta la unidad de España?", "o": ["La indivisibilidad de la Nación.", "La soberanía nacional.", "El derecho a la autodeterminación.", "La descentralización política."], "a": 0, "j": "Al amparo del artículo 2 CE, la Constitución se fundamenta en la indisoluble unidad de la Nación española, patria común e indivisible de todos los españoles."}, {"id": 8, "q": "¿En qué año se aprobó la Ley para la Reforma Política que permitió la transición democrática en España?", "o": ["1976 (en el 77 el 4 de enero entró en vigor, pero se aprobó en referéndum el 15 diciembre 76).", "1977.", "1978.", "1975."], "a": 0, "j": "La Ley 1/1977 para la Reforma Política fue sometida a referéndum el 15 de diciembre de 1976, entrando en vigor el 4 de enero de 1977."}, {"id": 9, "q": "Según el artículo 2 de la Constitución, ¿qué principio fundamenta la organización territorial del Estado?", "o": ["La autonomía de las nacionalidades y regiones.", "La descentralización política y administrativa.", "La independencia de los municipios.", "La unidad de España bajo un sistema federal."], "a": 0, "j": "En el artículo 2 de la Constitución  se reconoce y garantiza de forma el derecho a la autonomía de las nacionalidades y regiones que la integran, así como la solidaridad entre todas ellas."}, {"id": 10, "q": "¿Cuál es el fundamento del orden político y la paz social?", "o": ["La Constitución.", "La dignidad de la persona y los derechos inviolables.", "La soberanía del Estado.", "La unidad de España."], "a": 1, "j": "La dignidad de la persona, los derechos inviolables que le son inherentes, el libre desarrollo de la personalidad, el respeto a la ley y a los derechos de los demás son fundamento del orden político y de la paz social (artículo 10 CE)."}, {"id": 11, "q": "Según el artículo 6 de la Constitución Española, los partidos políticos expresan:", "o": ["La voluntad popular y son el único cauce de representación.", "El pluralismo político y concurren a la formación y manifestación de la voluntad popular.", "La estructura del Estado y su unidad indisoluble.", "La obligación de los ciudadanos de participar en la vida política."], "a": 1, "j": "Dispone el artículo 6 CE que los partidos políticos expresan el pluralismo político, concurren a la formación y manifestación de la voluntad popular."}, {"id": 12, "q": "Según la Constitución, ¿cuál de los siguientes derechos puede suspenderse en un estado de alarma?", "o": ["Derecho a la educación.", "Derecho a la inviolabilidad del domicilio.", "Derecho de reunión.", "Ninguno de los anteriores."], "a": 3, "j": "Conforme a la regulación del artículo 55.1 de la Constitución, la suspensión excepcional de derechos fundamentales únicamente es procedente durante la declaración de los estados de excepción o de sitio, de modo que en el estado de alarma no cabe suspender ninguno de los derechos indicados."}, {"id": 13, "q": "¿Cuántos títulos tiene la Constitución Española de 1978, sin contar el Preámbulo ni el Título Preliminar?", "o": ["9.", "10.", "11.", "12."], "a": 1, "j": "La Constitución se compone del Título Preliminar y diez Títulos numerados consecutivamente del I al X."}, {"id": 14, "q": "¿Quién sanciona y promulga las leyes según la Constitución Española?", "o": ["El Congreso de los Diputados.", "El Presidente del Gobierno.", "El Rey.", "El Tribunal Constitucional."], "a": 2, "j": "Según el artículo 91 CE, corresponde al Rey sancionar y promulgar las leyes aprobadas por las Cortes Generales."}, {"id": 15, "q": "¿Qué artículo de la Constitución establece la organización territorial del Estado?", "o": ["Artículo 1.", "Artículo 2.", "Artículo 3.", "Artículo 4."], "a": 1, "j": "El artículo 2 sienta las bases constitucionales de la organización territorial al proclamar la autonomía de las nacionalidades y regiones."}, {"id": 16, "q": "¿Cuál de los siguientes derechos es reconocido en el artículo 16 de la Constitución?", "o": ["Derecho de asociación.", "Libertad ideológica, religiosa y de culto.", "Derecho al honor y la propia imagen.", "Derecho de propiedad privada."], "a": 1, "j": "Se garantiza la libertad ideológica, religiosa y de culto de los individuos y las comunidades en el artículo 16 CE."}, {"id": 17, "q": "¿Qué principios deben regir las relaciones entre las comunidades autónomas según el artículo 2?", "o": ["Solidaridad y coordinación.", "Autodeterminación e independencia.", "Jerarquía y supremacía estatal.", "Federalismo y autarquía."], "a": 0, "j": "En concordancia con el artículo 2 de la Constitución Española, el precepto proclama como pilar el principio de solidaridad entre todas las nacionalidades y regiones que integran la Nación."}, {"id": 18, "q": "¿Qué órgano tiene la competencia exclusiva en la declaración de inconstitucionalidad de una norma?", "o": ["El Congreso de los Diputados.", "El Tribunal Supremo.", "El Tribunal Constitucional.", "El Defensor del Pueblo."], "a": 2, "j": "En virtud del artículo 161.1 CE, el Tribunal Constitucional ostenta la competencia exclusiva y suprema para enjuiciar y declarar la inconstitucionalidad de las leyes y disposiciones normativas con fuerza de ley."}, {"id": 19, "q": "¿Qué obligación tienen los españoles respecto al castellano, según la Constitución?", "o": ["Conocerlo y usarlo.", "Conocerlo.", "Usarlo obligatoriamente en el ámbito privado.", "Usarlo solo en actos oficiales."], "a": 1, "j": "Todos los españoles tienen el deber de conocerla y el derecho a usarla (art. 3 CE)."}, {"id": 20, "q": "¿En qué artículo de la Constitución Española se reconoce el derecho a la tutela judicial efectiva?", "o": ["Artículo 14.", "Artículo 24.", "Artículo 33.", "Artículo 44."], "a": 1, "j": "Según establece el artículo 24.1 de la Constitución, se reconoce a todas las personas el derecho fundamental a obtener la tutela efectiva de los jueces y tribunales en el ejercicio de sus derechos e intereses legítimos."}, {"id": 21, "q": "¿Qué artículo de la Constitución Española establece la igualdad ante la ley sin discriminación?", "o": ["Artículo 9.", "Artículo 14.", "Artículo 16.", "Artículo 23."], "a": 1, "j": "Proclama el artículo 14 de la Constitución que los españoles son iguales ante la ley, sin que pueda prevalecer discriminación por razón de nacimiento, raza, sexo, religión, opinión o cualquier otra condición o circunstancia personal o social."}, {"id": 22, "q": "¿Cuál de los siguientes derechos está protegido mediante el recurso de amparo ante el Tribunal Constitucional?", "o": ["Derecho de reunión.", "Derecho a la propiedad privada.", "Derecho a la seguridad social.", "Derecho al trabajo."], "a": 0, "j": "Conforme dispone el artículo 53.2 de la Constitución, el recurso de amparo protege los derechos reconocidos en el artículo 14 y la Sección 1ª del Capítulo II del Título I (arts. 15 al 29), categoría en la que se ubica el derecho de reunión del artículo 21."}, {"id": 23, "q": "¿Qué derechos fundamentales se garantizan mediante el recurso de amparo ante el Tribunal Constitucional?", "o": ["Solo los derechos recogidos en el Título VIII.", "Únicamente los derechos de los ciudadanos españoles.", "Los derechos y libertades reconocidos en la Sección 1ª del Capítulo II del Título I.", "Todos los derechos constitucionales sin excepción."], "a": 2, "j": "Cualquier ciudadano podrá recabar la tutela de las libertades y derechos reconocidos en el artículo 14 y la Sección primera del Capítulo segundo (...) a través del recurso de amparo ante el Tribunal Constitucional, según el artículo 53 CE."}, {"id": 24, "q": "¿Qué principios debe respetar la Administración de Justicia en la ejecución de las penas privativas de libertad?", "o": ["La reeducación y reinserción social del condenado.", "La proporcionalidad del castigo en función del daño causado.", "La represión del delito como prioridad absoluta.", "La disuasión como mecanismo de control social."], "a": 0, "j": "Establece el artículo 25 CE que las penas privativas de libertad estarán orientadas hacia la reeducación y reinserción social."}, {"id": 25, "q": "Según el artículo 17.2 de la Constitución Española, ¿cuál es el plazo máximo absoluto en el que la persona detenida preventivamente debe ser puesta en libertad o a disposición de la autoridad judicial?", "o": ["24 horas.", "48 horas.", "72 horas.", "7 días."], "a": 2, "j": "La detención preventiva no podrá durar más del tiempo estrictamente necesario y, en todo caso, en el plazo máximo de 72 horas el detenido deberá ser puesto en libertad o a disposición judicial (art. 17 CE)."}, {"id": 26, "q": "¿Qué derecho fundamental protege el artículo 18?", "o": ["Inviolabilidad del domicilio.", "Derecho de reunión.", "Libertad sindical.", "Derecho a la tutela judicial efectiva."], "a": 0, "j": "En el artículo 18.2 de la Constitución se garantiza la inviolabilidad del domicilio, impidiendo cualquier entrada o registro sin consentimiento del titular o resolución judicial, salvo delito flagrante."}, {"id": 27, "q": "¿Cuál de los siguientes casos constituiría una vulneración del derecho a la tutela judicial efectiva?", "o": ["Que una ley prohíba la revisión de sentencias firmes.", "Que una persona sea condenada con juicio.", "Que un juez dicte una sentencia que no satisfaga a una de las partes.", "Que un tribunal deniegue un recurso sin justificarlo."], "a": 3, "j": "A tenor de la doctrina sobre el artículo 24.1 CE, la arbitraria o infundada denegación de un recurso legalmente interpuesto por un órgano judicial genera indefensión y quiebra el derecho a la tutela judicial efectiva."}, {"id": 28, "q": "¿En qué artículo se establece la libertad de expresión?", "o": ["Artículo 18.", "Artículo 20.", "Artículo 22.", "Artículo 25."], "a": 1, "j": "El artículo de la Constitución reconoce el derecho a expresar y difundir libremente los pensamientos, ideas y opiniones mediante la palabra, el escrito o cualquier otro medio de reproducción."}, {"id": 29, "q": "El derecho de reunión viene regulado en el artículo:", "o": ["Artículo 21.", "Artículo 22.", "Artículo 23.", "Artículo 24."], "a": 0, "j": "El artículo 21 de la Constitución regula el derecho de reunión."}, {"id": 30, "q": "Según la Constitución, ¿cuál es el único límite al derecho de huelga?", "o": ["No afectar a la economía del país.", "Garantizar el mantenimiento de los servicios esenciales.", "No interferir en la actividad empresarial.", "Obtener la autorización del Gobierno."], "a": 1, "j": "La ley que regule el ejercicio de este derecho establecerá las garantías precisas para asegurar el mantenimiento de los servicios esenciales de la comunidad (art. 28 CE)."}, {"id": 31, "q": "¿Qué derecho garantiza el artículo 23?", "o": ["Derecho a la educación.", "Derecho a la participación política.", "Derecho a la asistencia sanitaria.", "Derecho a la seguridad social."], "a": 1, "j": "El artículo 23 de la Constitución consagra el derecho de los ciudadanos a participar en los asuntos públicos."}, {"id": 32, "q": "¿Cuál de las siguientes afirmaciones sobre el derecho a la huelga  es correcta?", "o": ["Puede ser suspendido en cualquier momento por orden gubernamental.", "Sólo puede ser ejercido por trabajadores del sector público.", "Debe regularse por ley para garantizar el mantenimiento de los servicios esenciales.", "No es un derecho reconocido en el ámbito constitucional."], "a": 2, "j": "El ejercicio de la huelga se halla sujeto al desarrollo legislativo encaminado a salvaguardar los servicios esenciales comunitarios, tal y como establece el artículo 28.2 CE."}, {"id": 33, "q": "Según el artículo 28, ¿qué derecho fundamental protege?", "o": ["Derecho a la propiedad privada.", "Libertad sindical y derecho de huelga.", "Derecho a la intimidad.", "Derecho a la vivienda."], "a": 1, "j": "Como determina el artículo 28 de la Constitución, el precepto se articula en dos vertientes: la libertad sindical y el derecho a la huelga de los trabajadores."}, {"id": 34, "q": "¿Cuál es el principio que debe regir el sistema tributario?", "o": ["Capacidad económica y progresividad.", "Igualdad absoluta en la carga fiscal.", "Exclusión de impuestos indirectos.", "La contribución voluntaria de los ciudadanos."], "a": 0, "j": "El artículo 31 CE hace referencia a un sistema tributario justo inspirado en los principios de igualdad y progresividad."}, {"id": 35, "q": "Según la Constitución Española, ¿qué ocurre si una norma infringe los derechos fundamentales de un ciudadano?", "o": ["El ciudadano puede solicitar la derogación de la norma.", "La norma queda automáticamente derogada.", "Se puede recurrir ante el Tribunal Constitucional mediante el recurso de inconstitucionalidad o amparo.", "Solo el Gobierno puede impugnar la norma."], "a": 2, "j": "En virtud de los artículos 53.2 y 161 de la Constitución, el ciudadano afectado ostenta la facultad de acudir a la tutela jurisdiccional ante los tribunales ordinarios e interponer, en su caso, el recurso de amparo ante el Tribunal Constitucional. Si una ley vulnera la Constitución, se puede plantear un recurso o una cuestión de inconstitucionalidad para que sea declarada nula."}, {"id": 36, "q": "Según el artículo 1 de la Constitución Española, la soberanía nacional reside en el pueblo español, ¿qué principio jurídico se deriva directamente de este precepto?", "o": ["El principio de legalidad.", "El principio democrático.", "El principio de supremacía constitucional.", "El principio de unidad territorial."], "a": 1, "j": "Según se deduce de la fundamentación constitucional, la atribución del poder soberano al pueblo constituye la plasmación directa del principio democrático."}, {"id": 37, "q": "En relación con el artículo 3, ¿cuál es la diferencia entre las lenguas cooficiales y el castellano dentro del marco constitucional?", "o": ["El castellano es la única lengua con protección estatal.", "Las lenguas cooficiales tienen prioridad en sus respectivas comunidades autónomas.", "El castellano debe ser conocido obligatoriamente, mientras que las lenguas cooficiales son de uso voluntario.", "Todas las lenguas oficiales tienen el mismo rango jurídico en el Estado."], "a": 2, "j": "Como establece el artículo 3 CE, sobre el castellano recae un deber constitucional de conocimiento para los españoles, mientras que el uso de las demás lenguas españolas es un derecho de carácter oficial en sus respectivas Comunidades Autónomas conforme a sus Estatutos."}, {"id": 38, "q": "¿Qué artículo de la Constitución establece la supremacía de la Constitución sobre el resto del ordenamiento jurídico?", "o": ["Artículo 1.", "Artículo 6.", "Artículo 9.", "Artículo 37."], "a": 2, "j": "Tal como estipula el artículo 9.1 de la Constitución, los ciudadanos y los poderes públicos están sujetos a la Constitución y al resto del ordenamiento jurídico."}, {"id": 39, "q": "Según el artículo 6 de la Constitución Española, los partidos políticos deben respetar:", "o": ["La voluntad de la mayoría parlamentaria.", "El pluralismo político y la estructura federal del Estado.", "La Constitución y la expresión democrática de la voluntad popular.", "La soberanía de la Corona como institución suprema del Estado."], "a": 2, "j": "Al amparo del artículo 6 de la Constitución, la creación y el ejercicio de la actividad de los partidos políticos son libres dentro del respeto a la Constitución y a la ley. Su estructura interna y funcionamiento deberán ser democráticos."}, {"id": 40, "q": "¿Qué función tienen las Fuerzas Armadas, además de garantizar la integridad territorial del Estado?", "o": ["Apoyar a las Fuerzas y Cuerpos de Seguridad del Estado en tiempos de crisis económica.", "Velar por la seguridad ciudadana en casos de alteración del orden público.", "Defender el ordenamiento constitucional.", "Asumir el poder ejecutivo en casos de inestabilidad política."], "a": 2, "j": "Las Fuerzas Armadas tienen como misión garantizar la soberanía e independencia de España, defender su integridad territorial y el ordenamiento constitucional (art. 8 CE)."}, {"id": 41, "q": "En virtud del artículo 10 de la Constitución Española, ¿qué tratado internacional tiene especial relevancia en la interpretación de los derechos fundamentales?", "o": ["La Convención de Ginebra.", "La Declaración Universal de Derechos Humanos.", "El Tratado de Maastricht.", "El Tratado de Lisboa."], "a": 1, "j": "Las normas relativas a los derechos fundamentales y a las libertades que la Constitución reconoce se interpretarán de conformidad con la Declaración Universal de Derechos Humanos y los tratados y acuerdos internacionales sobre las mismas materias ratificados por España, según el artículo 10 CE."}, {"id": 42, "q": "¿Qué derecho NO se reconoce a los extranjeros en España en igualdad de condiciones con los españoles?", "o": ["Libertad de expresión.", "Derecho a la participación política.", "Derecho a la tutela judicial efectiva.", "Derecho de asociación."], "a": 1, "j": "Solamente los españoles serán titulares de los derechos reconocidos en el artículo 23, salvo lo que, atendiendo a criterios de reciprocidad, pueda establecerse por tratado o ley para el derecho de sufragio activo y pasivo en las elecciones municipales (art. 13 CE)."}, {"id": 43, "q": "¿En qué supuesto puede la autoridad prohibir una manifestación?", "o": ["Cuando no tenga un motivo explícito.", "Cuando se celebre en un lugar cerrado.", "Cuando exista una amenaza real y grave para el orden público.", "Cuando afecte al tráfico rodado."], "a": 2, "j": "Dispone el artículo 21.2 CE que la autoridad sólo podrá prohibir manifestaciones cuando existan razones fundadas de alteración del orden público, con peligro para personas o bienes."}, {"id": 44, "q": "¿Qué principio fundamental debe garantizarse en el ámbito educativo?", "o": ["La gratuidad total de la enseñanza superior.", "La neutralidad ideológica absoluta de los docentes.", "El derecho de los padres a elegir la formación religiosa y moral de sus hijos.", "La exclusión de la enseñanza privada en el sistema educativo."], "a": 2, "j": "Los poderes públicos garantizan el derecho que asiste a los padres para que sus hijos reciban la formación religiosa y moral que esté de acuerdo con sus propias convicciones (art. 27.3 CE)."}, {"id": 45, "q": "¿Qué establece el artículo 35 sobre el derecho al trabajo?", "o": ["Que el trabajo es un derecho y un deber.", "Que el Estado debe proporcionar un empleo a cada ciudadano.", "Que la jornada laboral máxima será de 35 horas semanales.", "Que todos los trabajadores tienen derecho a la jubilación a los 60 años."], "a": 0, "j": "En aplicación del artículo 35.1 de la Constitución, se consagra que todos los españoles tienen el deber de trabajar y el derecho al trabajo."}, {"id": 46, "q": "¿Qué función cumplen los convenios colectivos?", "o": ["Regular las condiciones de trabajo y empleo.", "Sustituir la legislación laboral en determinados sectores.", "Ser vinculantes sólo para el sector público.", "No pueden contradecir ninguna disposición legal."], "a": 0, "j": "En virtud del artículo 37.1 de la Constitución, la ley garantizará el derecho a la negociación colectiva laboral entre representantes de trabajadores y empresarios, reconociendo la fuerza vinculante de los convenios para regular las condiciones de empleo."}, {"id": 47, "q": "¿Cómo protege la Constitución Española la libertad de empresa del artículo 38?", "o": ["Mediante la prohibición absoluta de intervención estatal.", "Garantizando la libre competencia dentro de la economía de mercado.", "Permitiendo la nacionalización de cualquier empresa privada.", "Limitando la actividad empresarial a sectores estratégicos."], "a": 1, "j": "Tal como consagra el artículo 38 de la Constitución, se reconoce la libertad de empresa en el marco de la economía de mercado."}, {"id": 48, "q": "¿Qué relación existe entre los principios de legalidad y seguridad jurídica mencionados en el artículo 9 de la Constitución?", "o": ["La legalidad prevalece sobre la seguridad jurídica en todos los casos.", "Ambos principios garantizan que las normas sean previsibles y aplicadas con coherencia.", "La seguridad jurídica sólo se aplica en casos de retroactividad de las normas.", "La seguridad jurídica es un principio político sin valor normativo."], "a": 1, "j": "De conformidad con el artículo 9.3 de la Constitución, ambos principios integran el cuadro de garantías jurídicas esenciales encaminadas a asegurar que el ordenamiento sea previsible, claro y exento de arbitrariedad."}, {"id": 49, "q": "¿Cuál de los siguientes principios no forma parte de la Constitución Española de 1978?", "o": ["Soberanía nacional.", "Separación de poderes.", "Derecho a la autodeterminación.", "Monarquía parlamentaria."], "a": 2, "j": "Según se desprende de los artículos 1 y 2 de la Constitución, se proclama la soberanía nacional, la división de poderes y la Monarquía parlamentaria, pero se reniega del derecho a la autodeterminación al fundarse en la indisoluble unidad de la Nación española."}, {"id": 50, "q": "¿Cuál de las siguientes afirmaciones es correcta sobre los sindicatos y las asociaciones empresariales?", "o": ["Están subordinados al poder legislativo.", "Su creación requiere autorización del Gobierno.", "Contribuyen a la defensa y promoción de los intereses económicos y sociales que representan.", "Sólo pueden actuar dentro del marco autonómico."], "a": 2, "j": "Los sindicatos de trabajadores y las asociaciones empresariales contribuyen a la defensa y promoción de los intereses económicos y sociales que les son propios (art. 7 CE)."}, {"id": 51, "q": "¿De qué fecha es la edición del Boletín Oficial del Estado en la que aparece publicada la Constitución Española?", "o": ["26 de diciembre de 1978.", "27 de diciembre de 1978.", "28 de diciembre de 1978.", "29 de diciembre de 1978."], "a": 2, "j": "El texto constitucional fue publicado formalmente y entró en vigor el 29 de diciembre de 1978."}, {"id": 52, "q": "¿En qué artículo de texto constitucional se hace mención expresa de los principios inspiradores de la Constitución?", "o": ["En el primero.", "En el noveno.", "En el decimocuarto.", "No existe ningún artículo en la Constitución donde se haga mención expresa de cuáles son sus principios inspiradores."], "a": 3, "j": "No existe ningún precepto único que titule expresamente los “principios inspiradores”."}, {"id": 53, "q": "No es un valor superior de nuestro ordenamiento jurídico...", "o": ["La legalidad.", "La justicia.", "La igualdad.", "El pluralismo político."], "a": 0, "j": "Los valores superiores consagrados en el artículo 1.1 de la Constitución son la libertad, la justicia, la igualdad y el pluralismo político."}, {"id": 54, "q": "El Título I de la Constitución tiene como denominación concreta...", "o": ["De los derechos y libertades.", "De los derechos y deberes fundamentales.", "De los derechos y libertades fundamentales.", "De los derechos y deberes."], "a": 1, "j": "El Título I CE se denomina “De los derechos y deberes fundamentales”."}, {"id": 55, "q": "Conforme el art. 10 de la Constitución ¿cuál de los siguientes no estaría considerado como fundamento del orden político y de la paz social?", "o": ["Los derechos inviolables que le son inherentes a la persona.", "La Declaración Universal de los Derechos Humanos y los tratados y acuerdos internacionales sobre las mismas materias ratificados por España.", "El respeto a la ley y a los derechos de los demás.", "El libre desarrollo de la personalidad."], "a": 1, "j": "La dignidad de la persona, los derechos inviolables que le son inherentes, el libre desarrollo de la personalidad, el respeto a la ley y a los derechos de los demás son fundamento del orden político y de la paz social (art. 10 CE)."}, {"id": 56, "q": "¿A qué corresponde la denominación de \"derechos y libertades\"?", "o": ["Al Título I de la Constitución.", "Al Capítulo II del Título I de la Constitución.", "A la Sección Ia del Capítulo II de la Constitución.", "A la Sección IIa del Capítulo II de la Constitución."], "a": 1, "j": "La denominación “Derechos y libertades” encabeza el Capítulo Segundo del Título I."}, {"id": 57, "q": "El art. 14 que precede las dos secciones en que se divide el Capítulo II del Título I de la Constitución dispone que...", "o": ["Los ciudadanos y los poderes públicos están sujetos a la Constitución y al resto del ordenamiento jurídico.", "La dignidad de la persona es fundamento del orden político y de la paz social.", "La nacionalidad española se adquiere, se conserva y se pierde de acuerdo con la ley.", "Ninguna es correcta."], "a": 3, "j": "El artículo 14 de la Constitución proclama la igualdad ante la ley y la prohibición de discriminación."}, {"id": 58, "q": "No forma parte de los derechos y libertades fundamentales...", "o": ["Derecho a la vivienda digna y adecuada.", "Derecho a la vida y a la integridad física y moral.", "Libertad de cátedra.", "Todos forman parte."], "a": 0, "j": "El derecho a la vivienda digna se regula en el artículo 47 (Capítulo III del Título I) como un principio rector, careciendo del rango de derecho fundamental."}, {"id": 59, "q": "Es un derecho y un deber del ciudadano...", "o": ["Defender España.", "Prestar asistencia de todo orden a los hijos habidos dentro o fuera del matrimonio.", "Socorrer a quien se hallare en peligro manifiesto y grave.", "Todas son correctas."], "a": 0, "j": "Estipula el artículo 30  de la Constitución que los españoles tienen el derecho y el deber de defender a España."}, {"id": 60, "q": "Es cierto que...", "o": ["El derecho de petición aparece en el Capítulo III del Título I de la Constitución.", "El hombre y la mujer tienen el deber de contraer matrimonio con plena igualdad jurídica.", "La ley regulará las peculiaridades propias del régimen jurídico de los Colegios Profesionales.", "Todas son ciertas."], "a": 2, "j": "La ley regulará las peculiaridades propias del régimen jurídico de los Colegios Profesionales y el ejercicio de las profesiones tituladas, tal y como dispone el artículo 36 de la Constitución."}, {"id": 61, "q": "Según el artículo 6 de la Constitución española de 1978, el instrumento fundamental para la participación política son:", "o": ["Los sindicatos de trabajadores y las asociaciones empresariales.", "Los partidos políticos.", "Los ciudadanos, individualmente.", "El Congreso de los Diputados y el Senado."], "a": 1, "j": "Dispone el artículo 6  CE que los partidos políticos expresan el pluralismo político, concurren a la formación y manifestación de la voluntad popular y son instrumento fundamental para la participación política."}, {"id": 62, "q": "Según la Constitución española, los valores superiores del ordenamiento jurídico español son:", "o": ["Los derechos fundamentales.", "La libertad, la justicia, la igualdad y el pluralismo político.", "La legalidad, la jerarquía normativa, la publicidad de las normas, la irretroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales, la seguridad jurídica, la responsabilidad y la interdicción de la arbitrariedad de los poderes públicos.", "La dignidad de la persona, los derechos inviolables que le son inherentes, el libre desarrollo de la personalidad, el respeto a la ley y a los derechos de los demás."], "a": 1, "j": "Según establece el artículo 1.1 de la Constitución, España propugna como valores superiores de su ordenamiento jurídico la libertad, la justicia, la igualdad y el pluralismo político."}, {"id": 63, "q": "Los extranjeros pueden participar en los procesos electorales de España:", "o": ["Si son residentes en España, siempre que exista tratado de reciprocidad con el país de origen y solamente en las elecciones municipales.", "Si son residentes en España pueden participar en cualquier elección, siempre que exista tratado de reciprocidad con el país de origen.", "Si son residentes en España y para las elecciones autonómicas y municipales.", "Aunque no sean residentes, solamente cuando expresamente lo soliciten."], "a": 0, "j": "Solamente los españoles serán titulares de los derechos reconocidos en el artículo 23, salvo lo que, atendiendo a criterios de reciprocidad, pueda establecerse por tratado o ley para el derecho de sufragio activo y pasivo en las elecciones municipales (artículo 13 CE)."}, {"id": 64, "q": "El nombramiento y relevo de los miembros civiles y militares de la Casa del Rey:", "o": ["Requiere refrendo del Presidente del Gobierno.", "Requiere refrendo del Ministro de la Presidente o del de Defensa, según cada caso.", "No requiere refrendo alguno.", "Únicamente requiere comunicación a las Mesas del Congreso y del Senado."], "a": 2, "j": "En virtud de los artículos 56.3 y 65.2 de la Constitución, el Rey nombra y releva libremente a los miembros civiles y militares de su Casa, acto exento del requisito de refrendo."}, {"id": 65, "q": "No corresponde al Pleno del Tribunal Constitucional la competencia para:", "o": ["La elección del Presidente del Tribunal.", "La aprobación del Reglamento de funcionamiento interno.", "La distribución de asuntos entre las Salas.", "La resolución de los recursos de amparo constitucional."], "a": 3, "j": "De conformidad con la Ley Orgánica 2/1979 del Tribunal Constitucional, el conocimiento y resolución de los recursos de amparo corresponde a las Salas o Secciones, no atribuyéndose ordinariamente al Pleno."}, {"id": 66, "q": "De acuerdo con lo establecido en la Constitución corresponde al Rey:", "o": ["Elegir al Presidente del Gobierno.", "Elaborar las leyes.", "Nombrar a los miembros del Gobierno a propuesta de su Presidente.", "Ejercer la función ejecutiva."], "a": 2, "j": "A tenor del artículo 62.e) de la Constitución, es competencia del Rey nombrar y separar a los miembros del Gobierno, a propuesta de su Presidente."}, {"id": 67, "q": "Los miembros del Tribunal Constitucional son designados:", "o": ["Por un periodo de nueve años, prorrogables por otros tres, como máximo.", "Por un período de nueve años y se renuevan por terceras partes cada tres.", "Por un período de seis años, prorrogable otros tres años más.", "La duración del mandato depende de la voluntad del órgano que propuso su nombramiento."], "a": 1, "j": "Los miembros del Tribunal Constitucional serán designados por un período de nueve años y se renovarán por terceras partes cada tres (art. 159.3 CE)."}, {"id": 68, "q": "De acuerdo con lo establecido en la Constitución, ¿qué órgano es competente para conocer del recurso contra leyes y disposiciones normativas con fuerza de ley?", "o": ["El Tribunal Supremo.", "El Consejo General del Poder Judicial.", "El Ministerio Fiscal.", "El Tribunal Constitucional."], "a": 3, "j": "Dispone el artículo 161.1.a CE que el Tribunal Constitucional es el competente para conocer del recurso de inconstitucionalidad contra leyes y disposiciones normativas con fuerza de ley."}, {"id": 69, "q": "El Senado puede hacer dimitir al Gobierno:", "o": ["Mediante la reprobación del Presidente del Gobierno.", "Mediante una moción de censura.", "En los supuestos de estado de alarma, excepción y sitio.", "En ningún caso."], "a": 3, "j": "Según se deduce del artículo 113 de la Constitución, la relación de confianza política y el exigimiento de responsabilidad mediante moción de censura corresponden privativamente al Congreso de los Diputados."}, {"id": 70, "q": "¿Cuál de las siguientes materias no está reservada a ley orgánica?", "o": ["El régimen electoral general.", "La regulación del funcionamiento del Tribunal Constitucional.", "La institución del Defensor del Pueblo.", "Ninguna es correcta, pues todas se regulan por LO."], "a": 3, "j": "Todas las materias mencionadas requieren Ley Orgánica según la Constitución: el régimen electoral general está reservado a Ley Orgánica por el art. 81.1 CE, mientras que las instituciones del Defensor del Pueblo y del Tribunal Constitucional exigen expresamente dicha reserva de ley en los arts. 54 y 165 CE."}, {"id": 71, "q": "Entre las causas de discriminación a las que se opone el art. 14 de la C.E. no figura citada expresamente la discriminación por razón de ...", "o": ["Opinión.", "Religión.", "Sexo.", "Figuran todas las que se indica."], "a": 3, "j": "El artículo 14 de la Constitución prohíbe que pueda prevalecer discriminación alguna por razón de nacimiento, raza, sexo, religión, opinión o cualquier otra condición o circunstancia personal o social."}, {"id": 72, "q": "Según el art. 15 C.E. todos tienen derecho a la vida y a la integridad ...", "o": ["Personal.", "Patrimonial.", "Física y moral.", "Física y espiritual."], "a": 2, "j": "Todos tienen derecho a la vida y a la integridad física y moral, de acuerdo con el artículo 15 de la Constitución."}, {"id": 73, "q": "A tenor del artículo 16.3 de la Constitución Española, los poderes públicos mantendrán con la Iglesia Católica y las demás confesiones:", "o": ["Una actitud de respeto.", "Relaciones de cooperación.", "Relaciones de colaboración en materias de orden civil (p.ej.: matrimonio).", "Relaciones de colaboración en materia educativa (centros concertados)."], "a": 1, "j": "Los poderes públicos mantendrán relaciones de cooperación con la Iglesia Católica y las demás confesiones, según dispone el art. 16.3 CE."}, {"id": 74, "q": "El plazo de 72 horas al que se refiere el art. 17.2 de la C.E. lo es de ...", "o": ["Detención preventiva.", "Prisión provisional.", "“Habeas Corpus”.", "Sentencia Firme."], "a": 0, "j": "A tenor del texto del artículo 17.2 de la Constitución, dicho tope temporal computa el plazo máximo de la detención preventiva."}, {"id": 75, "q": "Según la C.E., la asistencia del abogado está garantizada desde que ...", "o": ["Se produce la imputación judicial.", "Una persona es detenida.", "Sólo cuando el Juez le acusa formalmente de haber cometido un delito.", "Se tiene certeza de que se celebrará juicio (aunque sea de faltas)."], "a": 1, "j": "Como prescribe el artículo 17.3 de la Constitución, se garantiza la asistencia de letrado de forma inmediata desde el momento mismo en que una persona es detenida."}, {"id": 76, "q": "Conforme al art. 22.5 C.E. estàn prohibidas las asociaciones ...", "o": ["De carácter paramilitar.", "Que no estén registradas.", "Que persigan fines tipificados como delito o falta.", "Todas están prohibidas."], "a": 0, "j": "En virtud del artículo 22.5 CE, se prohíben las asociaciones secretas y las de carácter paramilitar."}, {"id": 77, "q": "La censura previa viene a quedar proscrita en el artículo que protege los derechos ...", "o": ["De asociación.", "De sindicación.", "De libertad de expresión (art. 20).", "De libertad de creencias (art. 16)."], "a": 2, "j": "Tal como dispone el artículo 20.2 de la Constitución, se prohíbe la censura previa respecto a la libertad de expresión e información."}, {"id": 78, "q": "Según el artículo 22 de la Constitución, para suspender la actividad de una asociación hace falta ...", "o": ["Resolución administrativa.", "Resolución judicial.", "Orden gubernativa.", "Nada, pues la actividad de las asociaciones no se puede suspender. Las mismas sólo puede disolverse."], "a": 1, "j": "Al amparo del artículo 22.4 de la Constitución, las asociaciones sólo podrán ser disueltas o suspendidas en sus actividades en virtud de resolución judicial motivada."}, {"id": 79, "q": "El derecho de petición al que se refiere el art. 29 de la C.E. ¿se reconoce expresamente a los extranjeros?", "o": ["Si, se habla de españoles y extranjeros.", "Si, si se infiere de la expresión que se utiliza es “todos”.", "No, se dice expresamente “todos los españoles tendrán ...”.", "La c) es correcta siempre que se exceptúe del derecho de petición a los miembros de Fuerzas o institutos armados."], "a": 2, "j": "Según se redacta en el artículo 29.1 de la Constitución, todos los españoles tendrán el derecho de petición individual y colectiva."}, {"id": 80, "q": "Los tribunales del honor se prohíben ...", "o": ["Por el art. 26, en cualquier caso.", "Sólo en el ámbito de la Administración Civil.", "Sólo en el ámbito de las organizaciones profesionales.", "Ninguna es correcta."], "a": 3, "j": "Se prohíben los Tribunales de Honor en el ámbito de la Administración civil y de las organizaciones profesionales."}, {"id": 81, "q": "Todos contribuirán al sostenimiento de los gastos públicos de acuerdo con su capacidad económica mediante un sistema tributario justo inspirado en los principios de igualdad y progresividad:", "o": ["Que, excepcionalmente, tendrá alcance confiscatorio.", "Que tendrá carácter confiscatorio.", "Que, en ningún caso, tendrá alcance confiscatorio.", "Ninguna es correcta."], "a": 2, "j": "A tenor del artículo 31.1 de la Constitución, todos contribuirán al sostenimiento de los gastos públicos de acuerdo con su capacidad económica mediante un sistema tributario justo inspirado en los principios de igualdad y progresividad que, en ningún caso, tendrá alcance confiscatorio."}, {"id": 82, "q": "¿Cuánto dura el mandato del Defensor del Pueblo?", "o": ["Cuatro años.", "Cinco años.", "Dos años.", "Tres años."], "a": 1, "j": "De acuerdo con la Ley Orgánica 3/1981, de 6 de abril, el Defensor del Pueblo es designado por las Cortes Generales para un periodo de cinco años."}, {"id": 83, "q": "Cuando las fuerzas y cuerpos de seguridad acuden al domicilio de una persona para proceder a su detención tras conocerse la comisión de un delito, ¿cuál de las siguientes afirmaciones es correcta?", "o": ["La persona investigada está obligada a franquear la entrada voluntariamente.", "Se requerirá autorización judicial o consentimiento del titular para entrar, salvo en los casos de flagrante delito.", "Agentes de la autoridad podrán acceder al domicilio libremente prescindiendo de cualquier formalidad o requisito.", "Ninguna de las afirmaciones anteriores es correcta."], "a": 1, "j": "Como dispone el artículo 18.2 CE, el domicilio es inviolable y la entrada o registro requiere el consentimiento del titular o resolución judicial, salvo supuesto de flagrante delito."}, {"id": 84, "q": "¿De quién recibe órdenes el Defensor del Pueblo?", "o": ["De los Tribunales.", "De las Cortes Generales.", "No está sometido a mandato imperativo.", "Del Gobierno."], "a": 2, "j": "En aplicación de la Ley Orgánica 3/1981, el Defensor del Pueblo actúa con independencia y no se encuentra sometido a mandato imperativo."}, {"id": 85, "q": "Uno de los siguientes derechos no puede ser suspendido cuando se declare el estado de sitio:", "o": ["A la inviolabilidad del domicilio.", "A la huelga.", "El de reunión.", "El de asociación."], "a": 3, "j": "Enumera el artículo 55.1 de la Constitución el catálogo de derechos suspendibles en el estado de sitio, que incluye la inviolabilidad domiciliaria, el derecho de reunión y la huelga, pero excluye el derecho de asociación."}, {"id": 86, "q": "El derecho de reunión precisa de:", "o": ["Comunicación previa a la autoridad en cualquier caso.", "Autorización previa, para el caso de manifestaciones.", "Autorización previa, para el caso de reuniones en lugares de tránsito público.", "Comunicación previa, en el caso de manifestaciones."], "a": 3, "j": "En los casos de manifestaciones se dará comunicación previa a la autoridad (art. 21 CE)."}, {"id": 87, "q": "Según la Constitución, la nacionalidad española se adquiere de acuerdo con:", "o": ["El origen.", "El nacimiento.", "La territorialidad.", "Lo establecido por la ley."], "a": 3, "j": "La nacionalidad española se adquiere, se conserva y se pierde de acuerdo con lo establecido por la ley, según el artículo 11.1 de la Constitución."}, {"id": 88, "q": "Los derechos fundamentales recogidos en el título I de la Constitución:", "o": ["Nunca podrán ser suspendidos.", "No pueden ser desarrollados legislativamente.", "Sólo podrán suspenderse cuando lo estime el gobierno.", "Podrán suspenderse, algunos, en determinados supuestos."], "a": 3, "j": "Conforme habilita el artículo 55 de la Constitución, determinados derechos del Título I son susceptibles de suspensión en los supuestos de declaración del estado de excepción o de sitio, o a nivel individual siempre que se cumplan ciertos requisitos."}, {"id": 89, "q": "Según el art. 49 CE, ¿Quién fomentará la participación de las organizaciones de personas con discapacidad?", "o": ["Los Tribunales ordinarios.", "Los poderes públicos.", "Las Cortes Generales.", "El Tribunal Constitucional."], "a": 1, "j": "Estipula el artículo 49 de la Constitución que los poderes públicos fomentarán la participación de las organizaciones de personas con discapacidad, en los términos que la ley establezca."}, {"id": 90, "q": "¿Cuál es el objetivo de los poderes públicos en relación con las personas con discapacidad, según el artículo 49 CE?", "o": ["Restringir su participación en la sociedad.", "Garantizar la plena autonomía personal y la inclusión social.", "Limitar su acceso a entornos universalmente accesibles.", "Ignorar sus necesidades específicas."], "a": 1, "j": "Dispone el artículo 49 de la Constitución que los poderes públicos impulsarán las políticas que garanticen la plena autonomía personal y la inclusión social de las personas con discapacidad, en entornos universalmente accesibles."}, {"id": 91, "q": "¿Qué poder puede regular el ejercicio de los derechos y libertades reconocidos en el Capítulo segundo del presente Título?", "o": ["Poder Ejecutivo.", "Poder Legislativo.", "Poder Judicial.", "Poder Municipal."], "a": 1, "j": "Como ordena el artículo 53.1 de la Constitución, el ejercicio de los derechos y libertades del Capítulo II sólo podrá regularse por ley, correspondiendo dicha función al Poder Legislativo."}, {"id": 92, "q": "¿En qué instancia se puede recabar la tutela de las libertades y derechos reconocidos en el artículo 14 y la Sección primera del Capítulo segundo?", "o": ["Tribunal Constitucional.", "Cortes Generales.", "Tribunales ordinarios.", "Poder Ejecutivo."], "a": 2, "j": "Cualquier ciudadano podrá recabar la tutela de las libertades y derechos reconocidos en el artículo 14 y la Sección primera del Capítulo segundo ante los Tribunales ordinarios por un procedimiento basado en los principios de preferencia y sumariedad, según el artículo 53.2 de la Constitución."}, {"id": 93, "q": "¿Cuándo podrán ser suspendidos los derechos reconocidos en los artículos 17, 18, apartados 2 y 3, entre otros?", "o": ["En cualquier momento.", "Durante el estado de excepción o de sitio.", "Solo en casos de objeción de conciencia.", "Cuando lo decida el Defensor del Pueblo."], "a": 1, "j": "Los derechos reconocidos en los artículos 17, 18, apartados 2 y 3, artículos 19, 20, apartados 1, a) y d), y 5, artículos 21, 28, apartado 2, y artículo 37, apartado 2, podrán ser suspendidos cuando se acuerde la declaración del estado de excepción o de sitio en los términos previstos en la Constitución."}, {"id": 94, "q": "¿Qué institución será regulada por una ley orgánica como alto comisionado de las Cortes Generales para la defensa de los derechos comprendidos en el Título I CE?", "o": ["Tribunal Constitucional.", "Defensor del Pueblo.", "Tribunal de Justicia.", "Fiscal General."], "a": 1, "j": "Según el artículo 54, una ley orgánica regulará la institución del Defensor del Pueblo, como alto comisionado de las Cortes Generales, designado por éstas para la defensa de los derechos comprendidos en el Título I CE."}, {"id": 95, "q": "¿Cuál es la consecuencia de la utilización injustificada o abusiva de las facultades reconocidas en la ley orgánica que puede suspender derechos?", "o": ["Multa administrativa.", "Acción civil.", "Responsabilidad penal.", "Advertencia pública."], "a": 2, "j": "La utilización injustificada o abusiva de las facultades reconocidas en la ley orgánica que suspenda los derechos, en virtud del artículo 55.2 CE, producirá responsabilidad penal."}, {"id": 96, "q": "¿Quién designa al Defensor del Pueblo para la defensa de los derechos comprendidos en el Título I CE?", "o": ["Poder Judicial.", "Poder Ejecutivo.", "Cortes Generales.", "Tribunal Constitucional."], "a": 2, "j": "Dispone el artículo 54 que el Defensor del Pueblo, alto comisionado de las Cortes Generales, es designado por éstas para la defensa de los derechos comprendidos en Título I CE."}, {"id": 97, "q": "¿En qué casos se podrá aplicar el recurso de amparo ante el Tribunal Constitucional según el Artículo 53?", "o": ["Solo en casos de discriminación de género.", "En casos de declaración de estado de excepción.", "En situaciones de objeción de conciencia.", "Para la tutela de libertades y derechos reconocidos en la Sección primera del Capítulo segundo, exclusivamente."], "a": 2, "j": "Conforme al artículo 53.2 de la Constitución, el recurso de amparo  no se limita exclusivamente a los derechos de la Sección 1.ª del Capítulo II, sino que abarca también el artículo 14 y el derecho a la objeción de conciencia reconocido en el artículo 30."}, {"id": 98, "q": "¿Qué principios informarán la legislación positiva, la práctica judicial y la actuación de los poderes públicos, según el Artículo 54?", "o": ["Principios económicos.", "Principios éticos.", "Principios reconocidos en el Capítulo tercero.", "Principios políticos."], "a": 2, "j": "Según establece el artículo 53.3 de la Constitución, los principios reconocidos en el Capítulo III informarán la legislación positiva, la práctica judicial y la actuación de los poderes públicos."}, {"id": 99, "q": "¿En qué casos podrá limitarse el art. 19 CE?", "o": ["Estado de excepción y sitio.", "Estado de alarma, exclusivamente.", "Estado de alarma, excepción y sitio.", "Ninguna es correcta."], "a": 0, "j": "El artículo 55.1 de la Constitución establece qué derechos pueden ser suspendidos cuando se declare el estado de excepción o de sitio, incluyendo los reconocidos en el artículo 19 CE."}, {"id": 100, "q": "En casos de elementos terroristas, podrá suspenderse el tiempo máximo de 72 hrs. para la detención preventiva...", "o": ["Esta suspensión debe ser individual, exclusivamente.", "Esta suspensión puede ser individual o colectiva.", "Esta suspensión no es correcta, ya que no podría limitarse.", "Esta suspensión debe ser colectiva, exclusivamente."], "a": 0, "j": "En virtud del artículo 55.2 de la Constitución, la suspensión de la detención preventiva en el ámbito de elementos terroristas debe aplicarse de forma individual y con control judicial."}, {"id": 101, "q": "A través de un procedimiento basado en la preferencia y sumariedad, cualquier ciudadano podrá recabar la tutela de las libertades y los derechos reconocidos en los siguientes arts...", "o": ["14, sección 1ª capítulo 2º y 30.2 CE.", "14, sección 1ª capítulo 2º CE.", "arts. 15-29 CE.", "Sección 1ª capítulo 2º CE."], "a": 1, "j": "Tal como dispone el artículo 53.2 de la Constitución, el procedimiento judicial basado en los principios de preferencia y sumariedad ampara las libertades del artículo 14, la Sección 1ª del Capítulo II del Título I y la objeción de conciencia del artículo 30.2. CE."}, {"id": 102, "q": "El art. 17.3 CE podrá ser suspendido:", "o": ["En el estado de excepción y sitio.", "En el estado de sitio, exclusivamente.", "En el estado de alarma, excepción y sitio.", "Este artículo sólo puede ser limitado."], "a": 1, "j": "El artículo 55.1 de la Constitución contempla la suspensión de las garantías del detenido del artículo 17.3 CE exclusivamente para el estado de sitio."}, {"id": 103, "q": "De conformidad con lo dispuesto en el artículo 24 de la Constitución Española, todas las personas tienen derecho al Juez ordinario predeterminado por la ley, a la defensa y a la asistencia de letrado y a:", "o": ["Obtener la tutela efectiva de los jueces y tribunales en el ejercicio de sus derechos e intereses legítimos.", "Un proceso penal sin dilaciones indebidas.", "Ser informados de la denuncia formal formulada contra ellos.", "Todas son correctas."], "a": 0, "j": "El artículo 24.1 de la Constitución recoge que todas las personas tienen derecho a obtener la tutela efectiva de los jueces y tribunales en el ejercicio de sus derechos e intereses legítimos."}, {"id": 104, "q": "Según el artículo 103 de la Constitución, la ley regulará:", "o": ["El estatuto de los funcionarios públicos.", "El acceso a la función pública de acuerdo con los principios de mérito y capacidad.", "El sistema de incompatibilidades y las garantías para la imparcialidad en el ejercicio de sus funciones de los funcionarios públicos.", "Todas las anteriores."], "a": 3, "j": "El artículo 103.3 de la Constitución contempla que la ley regulará el estatuto de los funcionarios públicos, el acceso a la función pública de acuerdo con los principios de mérito y capacidad, las peculiaridades del ejercicio de su derecho a la sindicación, el sistema de incompatibilidades y las garantías para la imparcialidad en el ejercicio de sus funciones."}, {"id": 105, "q": "El recurso de inconstitucionalidad es uno de los procesos constitucionales a través de los cuales el Tribunal Constitucional garantiza la supremacía de la Constitución Española. De acuerdo con lo previsto en el texto constitucional: ¿Quién está legitimado para interponer el citado recurso?", "o": ["El Presidente del Gobierno, el Defensor del Pueblo, 50 diputados, 50 senadores, los órganos colegiados ejecutivos de las comunidades autónomas y, en su caso, las asambleas de las mismas.", "El Presidente del Gobierno, 50 diputados, 50 senadores y los órganos colegiados ejecutivos de las comunidades autónomas.", "El Presidente del Gobierno, el Defensor del Pueblo, 50 diputados, 50 senadores, los órganos de las asambleas legislativas de las mismas.", "El Presidente del Gobierno y 50 diputados y senadores."], "a": 0, "j": "Dispone el artículo 162 de la Constitución que están legitimados para interponer el recurso de inconstitucionalidad, el Presidente del Gobierno, el Defensor del Pueblo, 50 Diputados, 50 Senadores, los órganos colegiados ejecutivos de las Comunidades Autónomas y, en su caso, las Asambleas de las mismas."}, {"id": 106, "q": "El artículo 103 de la CE recoge los principios de actuación de las Administraciones Públicas. Señale cuál de ellos NO aparece en el citado artículo constitucional:", "o": ["Eficacia.", "Jerarquía.", "Coordinación.", "Eficiencia."], "a": 3, "j": "La Administración Pública actúa de acuerdo con los principios de eficacia, jerarquía, descentralización, desconcentración y coordinación, según el artículo 103 CE."}, {"id": 107, "q": "En la Constitución Española, la propiedad privada ha de entenderse como el derecho individual y personal por antonomasia, que se encuentra incluido en:", "o": ["El artículo 33, dentro del capítulo segundo del título primero.", "El artículo 34, dentro del capítulo primero del título primero.", "El artículo 33, dentro del capítulo primero del título segundo.", "El artículo 31, dentro del capítulo segundo del título primero."], "a": 0, "j": "El artículo 33.1 de la Constitución reconoce el derecho a la propiedad privada. Su ubicación en el texto constitucional es en el título I, Capítulo II, Sección 2ª."}, {"id": 108, "q": "De acuerdo con el artículo 55 de Ia Constitución, los derechos reconocidos en los artículos 17, 18, apartados 2 y 3, artículos 19, 20, apartados 1, a) y d), y 5, artículos 21, 28, apartado 2, y artículo 37, apartado 2, de Ia misma podrán ser suspendidos cuando:", "o": ["Se acuerde la declaración del estado de excepción, de sitio o de alarma en los términos previstos en la constitución. Se exceptúa de lo establecido anteriormente el apartado 3 del artículo 17 para el supuesto de declaración de estado de excepción.", "Se acuerde la declaración del estado de excepción, de sitio o de alarma en los términos previstos en la constitución. Se exceptúa de lo establecido anteriormente el apartado 2 del artículo 17 para el supuesto de declaración de estado de excepción.", "Se acuerde la declaración del estado de excepción o de sitio en los términos previstos en la Constitución. Se exceptúa de lo establecido anteriormente el apartado 3 del artículo 17 para el supuesto de declaración de estado de excepción.", "Se acuerde la declaración del estado de excepción o de sitio en los términos previstos en la constitución. Se exceptúa de lo establecido anteriormente el apartado 2 del artículo 17 para el supuesto de declaración de estado de excepción."], "a": 2, "j": "Los derechos reconocidos en los artículos 17, 18, apartados 2 y 3, artículos 19, 20, apartados 1, a) y d), y 5, artículos 21, 28, apartado 2, y artículo 37, apartado 2, podrán ser suspendidos cuando se acuerde la declaración del estado de excepción o de sitio en los términos previstos en la Constitución. Se exceptúa de lo establecido anteriormente el apartado 3 del artículo 17 para el supuesto de declaración de estado de excepción (art. 55.1 CE)."}, {"id": 109, "q": "La Disposición Adicional Única, apartado 3, de Ia Reforma del artículo 135 de Ia Constitución Española, de 27 de septiembre de 2011, dispone que los límites de déficit estructural establecidos en el artículo 135.2 de Ia misma entrarán en vigor a partir de:", "o": ["2020.", "2019.", "2018.", "2017"], "a": 0, "j": "La Disposición adicional única, apartado 3, de la Reforma del artículo 135 de la Constitución Española (de 27 de septiembre de 2011) establece que los límites de déficit estructural establecidos en el apartado 2 del artículo 135 de la Constitución entrarán en vigor a partir de 2020."}, {"id": 110, "q": "De acuerdo con el artículo 53.2 de la CE, indique cuál de los derechos siguientes goza de especial protección jurisdiccional mediante un procedimiento basado en los principios de preferencia y sumariedad:", "o": ["El derecho a disfrutar de una vivienda digna y adecuada.", "El derecho a la propiedad privada y a la herencia.", "El derecho al trabajo.", "El derecho de asociación."], "a": 3, "j": "A tenor del artículo 53.2 CE, el derecho de asociación (artículo 22) forma parte de la Sección 1ª del Capítulo II del Título I, gozando de la especial protección jurisdiccional mediante un procedimiento basado en los principios de preferencia y sumariedad."}, {"id": 111, "q": "¿Qué artículos de la CE pueden suspenderse tanto en caso de Estado de Excepción, Estado y  de Sitio, como en los supuestos por Ley Orgánica de forma individual?", "o": ["El artículo 17 y el 18.2 y 3.", "El artículo 17.2 y el 18.", "El artículo 17.2 y el 18.2 y 3.", "El artículo 17 (salvo el 17.3) y el 18.2 y 3."], "a": 2, "j": "Los estados de excepción y sitio (art. 55.1 CE) permiten la suspensión colectiva de un amplio abanico de derechos (incluidos el art. 17 y los arts. 18.2 y 18.3 CE), la suspensión individual del artículo 55.2 CE para investigaciones sobre terrorismo o bandas armadas se limita a los artículos 17.2, 18.2 y 18.3 CE."}, {"id": 112, "q": "Entre los derechos y libertades que la Constitución reconoce a los ciudadanos en el capítulo 2º, no figura:", "o": ["El derecho a la integridad moral.", "El derecho a la herencia.", "El derecho a la protección de la salud.", "El derecho a la creación literaria."], "a": 2, "j": "La protección de la salud está reconocida en el artículo 43 CE, el cual no forma parte del Capítulo II , sino del Capítulo III del Título I como un principio rector de la política social y económica."}, {"id": 113, "q": "El artículo 53.2 de la Constitución garantiza que cualquier ciudadano puede recabar, mediante recurso de amparo ante el tribunal constitucional la tutela de su derecho a:", "o": ["Disfrutar de una vivienda digna.", "La libertad de cátedra.", "La negociación colectiva.", "La actualización de las pensiones."], "a": 1, "j": "Como consagra el artículo 53.2 CE, la libertad de cátedra (artículo 20  CE) es susceptible de amparo al pertenecer a la Sección 1ª del Capítulo II del Título I."}, {"id": 114, "q": "El derecho de los trabajadores y empresarios a adoptar medidas de conflicto colectivo:", "o": ["Se tutela mediante el recurso de Amparo.", "No es objeto de tutela mediante el recurso de Inconstitucionalidad.", "Puede suspenderse en el Estado de Excepción o de Sitio.", "Son correctas b y c."], "a": 2, "j": "El derecho a adoptar medidas de conflicto colectivo está regulado en el artículo 37.2 de la Constitución y figura en el artículo 55.1 CE entre los derechos que pueden ser suspendidos cuando se declare el estado de excepción o de sitio."}, {"id": 115, "q": "El Derecho de Huelga:", "o": ["Se tutela mediante el recurso de Amparo.", "No es objeto de tutela mediante el recurso de Inconstitucionalidad.", "Puede suspenderse en el Estado de Alarma, Excepción o de Sitio.", "Es objeto de reforma por el procedimiento previsto en el artículo 167."], "a": 0, "j": "El derecho de huelga está reconocido en el artículo 28.2 de la Constitución, dentro de la Sección 1.ª del Capítulo II del Título I, permitiendo su tutela mediante el recurso de amparo de conformidad con el artículo 53.2 CE."}, {"id": 116, "q": "La Constitución excluye del derecho a la sindicación:", "o": ["A los Secretarios de la Administración de Justicia.", "Al personal colaborador con la Justicia.", "A los Jueces y Fiscales.", "A los Abogados."], "a": 2, "j": "Los Jueces, Magistrados y Fiscales en activo no podrán desempeñar otros cargos públicos, ni pertenecer a partidos políticos o sindicatos (art. 127 CE)."}, {"id": 117, "q": "Entre las garantías jurídicas reconocidas por la Constitución Española de 1978 en su artículo 9, figura:", "o": ["La arbitrariedad de los poderes públicos.", "El acceso a la cultura.", "El principio de legalidad.", "La retroactividad de las disposiciones sancionadoras no favorables."], "a": 2, "j": "La Constitución garantiza el principio de legalidad, la jerarquía normativa, la publicidad de las normas, la irretroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos individuales, la seguridad jurídica, la responsabilidad y la interdicción de la arbitrariedad de los poderes públicos (art. 9.3 CE)."}, {"id": 118, "q": "De acuerdo con el artículo 17.2 de la Constitución Española, respecto a la duración de la detención preventiva, ¿cuál de las siguientes afirmaciones es correcta?", "o": ["Su duración máxima se fijará libremente mediante reglamento administrativo.", "No podrá durar más del tiempo estrictamente necesario para las averiguaciones y, en todo caso, en el plazo máximo de 72 horas el detenido deberá ser puesto en libertad o a disposición judicial.", "Tiene una duración fija de 72 horas en todos los supuestos de detención.", "La Constitución no establece ningún límite temporal para la detención preventiva."], "a": 1, "j": "Según el artículo 17.2 de la Constitución, la detención preventiva no podrá durar más del tiempo estrictamente necesario para la realización de las averiguaciones tendentes al esclarecimiento de los hechos, y, en todo caso, en el plazo máximo de setenta y dos horas, el detenido deberá ser puesto en libertad o a disposición de la autoridad judicial."}, {"id": 119, "q": "La Constitución Española en su artículo 28.2, reconoce el derecho de huelga:", "o": ["A los empresarios mediante el cierre patronal.", "A los trabajadores sindicados.", "A los trabajadores para la defensa de sus intereses.", "A todos los españoles."], "a": 2, "j": "El artículo 28.2 de la Constitución reconoce el derecho a la huelga de los trabajadores para la defensa de sus intereses."}, {"id": 120, "q": "El Título Preliminar de la Constitución está compuesto por:", "o": ["Un único capítulo.", "Dos capítulos.", "Tres capítulos.", "Todas las respuestas anteriores son falsas."], "a": 3, "j": "El Título Preliminar de la Constitución (artículos 1 al 9) no cuenta con ningún tipo de división interna en capítulos."}, {"id": 121, "q": "¿Cuál de los siguientes enunciados contenidos en el preámbulo de la CE es correcto?", "o": ["Garantizar la convivencia democrática dentro de la Constitución y de las normas jurídicas conforme a un orden económico y social justo.", "Constituir un Estado de Derecho que asegure el imperio de la ley como expresión de la voluntad popular.", "Proteger a todos los españoles y pueblos de España en el ejercicio de los derechos humanos, sus culturas y tradiciones, lenguas e instituciones.", "Promover el progreso de la cultura y de la economía para asegurar a todos un digno nivel de vida."], "a": 2, "j": "En el preámbulo de la Constitución, se proclama la voluntad de proteger a todos los españoles y pueblos de España en el ejercicio de los derechos humanos, sus culturas y tradiciones, lenguas e instituciones."}, {"id": 122, "q": "Conforme dispone el artículo 22.4 de la Constitución Española, las asociaciones sólo podrán ser disueltas o suspendidas en sus actividades:", "o": ["En virtud de resolución judicial expresa.", "En virtud de resolución judicial motivada.", "En virtud de resolución administrativa o judicial expresa.", "En virtud de resolución administrativa o judicial motivada"], "a": 1, "j": "Las asociaciones sólo podrán ser disueltas o suspendidas en sus actividades en virtud de resolución judicial motivada, según el artículo 22.4 de la Constitución."}, {"id": 123, "q": "Según el artículo 10.2 de la Constitución Española, las normas relativas a los derechos fundamentales y a las libertades que la Constitución reconoce se interpretarán de conformidad con la Declaración Universal de Derechos Humanos y:", "o": ["Los tratados y acuerdos internacionales sobre las mismas materias ratificados por España.", "La legislación de desarrollo promulgada al efecto.", "Los Acuerdos de la Asamblea de Naciones Unidas en materia de Derechos Humanos.", "Las respuestas b) y c) son correctas."], "a": 0, "j": "Las normas relativas a los derechos fundamentales y a las libertades que la Constitución reconoce se interpretarán de conformidad con la Declaración Universal de Derechos Humanos y los tratados y acuerdos internacionales sobre las mismas materias ratificados por España (art. 10.2 CE)."}, {"id": 124, "q": "La CE establece la igualdad de los españoles ante la ley sin que pueda prevalecer discriminación alguna por razón de nacimiento, raza, religión, opinión o cualquier otra condición o circunstancia personal o social, en el artículo:", "o": ["13.", "14.", "15.", "16."], "a": 1, "j": "Dispone el artículo 14 de la Constitución que los españoles son iguales ante la ley, sin que pueda prevalecer discriminación alguna por razón de nacimiento, raza, sexo, religión, opinión o cualquier otra condición o circunstancia personal o social."}, {"id": 125, "q": "La Constitución permite expresamente:", "o": ["Los Tribunales de excepción.", "Los Tribunales de honor que se creen en la Administración civil.", "Los Tribunales populares.", "Los Tribunales consuetudinarios."], "a": 3, "j": "Los ciudadanos podrán ejercer la acción popular y participar en la Administración de Justicia mediante la institución del Jurado, en la forma y con respecto a aquellos procesos penales que la ley determine, así como en los Tribunales consuetudinarios y tradicionales, según establece el art. 125 CE."}, {"id": 126, "q": "Los derechos económicos de los trabajadores españoles en el extranjero se regulan en:", "o": ["En el artículo 41 CE.", "En el artículo 42 CE.", "En el artículo 43 CE.", "En el artículo 44.1 CE."], "a": 1, "j": "El artículo 42 CE dicta que el Estado velará especialmente por la salvaguardia de los derechos económicos y sociales de los trabajadores españoles en el extranjero y orientará su política hacia su retorno."}, {"id": 127, "q": "La Constitución entró en vigor:", "o": ["Al día siguiente de su publicación en el BOE.", "El mismo día de su publicación en el BOE.", "Al día siguiente del referéndum que la aprobó.", "Todas son falsas."], "a": 1, "j": "Dispone la disposición final de la Constitución que la misma entrará en vigor el mismo día de la publicación de su texto oficial en el boletín oficial del Estado."}, {"id": 128, "q": "El procedimiento de “habeas corpus” garantiza:", "o": ["La asistencia de abogado al detenido en las diligencias policiales y judiciales.", "El derecho de toda persona detenida a ser informada de forma inmediata de sus derechos y de las razones de su detención.", "El derecho de toda persona detenida a ser puesta en libertad o a disposición de la autoridad judicial, una vez superado el plazo máximo establecido para la detención preventiva.", "La inmediata puesta a disposición judicial de toda persona detenida ilegalmente."], "a": 3, "j": "Según preceptúa el artículo 17.4 constitucional, el mecanismo de Habeas Corpus tiene por objeto lograr la inmediata puesta a disposición judicial de toda persona detenida ilegalmente."}, {"id": 129, "q": "¿En qué artículo de la Constitución Española, se establece que los poderes públicos mantendrán un régimen público de seguridad social para todos los ciudadanos?", "o": ["Artículo 63.", "Artículo 41.", "Artículo 10.", "Artículo 39."], "a": 1, "j": "Los poderes públicos mantendrán un régimen público de Seguridad Social para todos los ciudadanos, que garantice la asistencia y prestaciones sociales suficientes ante situaciones de necesidad, especialmente en caso de desempleo. La asistencia y prestaciones complementarias serán libres (art. 41 CE)."}, {"id": 130, "q": "¿Cuál de estas afirmaciones es correcta de acuerdo con la Constitución?:", "o": ["Las penas privativas de libertad están orientadas hacia la reeducación pudiendo consistir en trabajos forzados.", "El condenado a pena de prisión tendrá derecho a un trabajo remunerado.", "La Administración civil puede imponer sanciones que impliquen privación de libertad.", "Las medidas de seguridad no pueden darse en nuestro ordenamiento jurídico."], "a": 1, "j": "De acuerdo con el artículo 25.2 de la Constitución, el recluso condenado a pena de prisión que cumpla la misma tendrá derecho a un trabajo remunerado."}, {"id": 131, "q": "No es nota fundamental del Estado Social:", "o": ["Establecer un sistema jerárquico de normas.", "Asumir la redistribución social de la producción.", "Prestar servicios sociales.", "Facilitar la participación ciudadana en la vida política y social."], "a": 0, "j": "La jerarquía normativa es una garantía del Estado de Derecho consagrada en el artículo 9.3 de la Constitución, mientras que las demás opciones responden a los principios rectores y mandatos de intervención de los poderes públicos del Estado Social, cuyo objetivo principal es remover los obstáculos para lograr una libertad e igualdad reales y efectivas mediante la prestación de servicios, la redistribución y el fomento de la participación ciudadana."}, {"id": 132, "q": "Los principios rectores de la política social y económica del Estado se encuentran en:", "o": ["Capítulo II del Título I CE.", "Capítulo II del Título I, en su sección lª CE.", "Capítulo III del Título I CE.", "Capítulo II del Título I en su sección 2ª CE."], "a": 2, "j": "Los principios rectores de la política social y económica del Estado se encuentran en el Capítulo III del Título I de la Constitución Española."}, {"id": 133, "q": "La participación de la juventud en todos los aspectos de la vida social se contempla:", "o": ["En el artículo 41 CE.", "En el artículo 45.2 CE.", "En el artículo 48 CE.", "En el artículo 49 CE."], "a": 2, "j": "Los poderes públicos promoverán las condiciones para la participación libre y eficaz de la juventud en el desarrollo político, social, económico y cultural, según el artículo 48 de la Constitución."}, {"id": 134, "q": "En caso de declaración del estado de excepción podrá suspenderse:", "o": ["El derecho de asociación.", "El derecho a sindicarse libremente. (28.1)", "El derecho a la huelga.", "El derecho a la negociación colectiva laboral. (37.1)"], "a": 2, "j": "El artículo 55.1 de la Constitución contempla el derecho a la huelga entre los derechos que pueden ser suspendidos tras la declaración del estado de excepción o de sitio, mientras que las demás opciones no son susceptibles de suspensión colectiva."}, {"id": 135, "q": "El derecho de fundación para fines de interés general:", "o": ["Es un derecho reconocido en la sección 1ª del capítulo II del título I de la Constitución.", "Es un derecho sin alcance constitucional, reconocido en la ley.", "Vincula a todos los poderes públicos y sólo por ley podrá regularse su ejercicio.", "No es un derecho fundamental, pero sí informa la actuación de los poderes públicos."], "a": 2, "j": "El derecho de fundación para fines de interés general se encuentra reconocido en el artículo 34 de la Constitución, precepto ubicado en la Sección 2.ª del Capítulo II del Título I y que, en virtud de lo dispuesto en el artículo 53.1 CE, vincula a todos los poderes públicos y su ejercicio sólo puede regularse por ley."}, {"id": 136, "q": "Según el artículo 35 CE, “tienen el deber de trabajar y derecho al trabajo”:", "o": ["Todos los residentes en España.", "Todos los residentes regularizados en España.", "Todos los españoles.", "Todos los españoles que hayan cumplido 18 años."], "a": 2, "j": "Todos los españoles tienen el deber de trabajar y el derecho al trabajo (art. 35 CE)."}];
+const LETTERS = ['A','B','C','D'];
+const KEY = 'testTema1CE_v1';
+const BY_ID = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
+const $ = id => document.getElementById(id);
+
+let S = null;            // sesión actual
+let cfg = { count: 'all', shuffle: false };
+let tabFilter = 'all';
+let timer = null;
+
+/* ---------- Utilidades ---------- */
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+const clear = () => { try { localStorage.removeItem(KEY); } catch (e) {} };
+const fmtTime = s => { const m = Math.floor(s / 60), r = s % 60; return m + ' min ' + String(r).padStart(2, '0') + ' s'; };
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+function toast(msg) { const t = el('div', 'toast', msg); document.body.appendChild(t); setTimeout(() => t.remove(), 1800); }
+
+const qAt = i => BY_ID[S.order[i]];
+const isChecked = id => S.finished || !!S.checked[id];
+const verdictOf = id => { const a = S.answers[id]; if (a === undefined) return 'blank'; return a === BY_ID[id].a ? 'ok' : 'bad'; };
+
+/* ---------- Pantallas ---------- */
+function show(name) {
+  ['Start', 'Quiz', 'Result'].forEach(n => $('screen' + n).classList.toggle('hidden', n !== name));
+  $('bottomBar').classList.toggle('hidden', name !== 'Quiz');
+  $('btnGrid').classList.toggle('hidden', name !== 'Quiz');
+  $('progress').parentElement.classList.toggle('hidden', name !== 'Quiz');
+  $('subtitle').textContent = name === 'Result' ? 'Resultados' : 'Cuestionario de preparación';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+/* ---------- Inicio ---------- */
+function buildStart() {
+  $('totalQ').textContent = QUESTIONS.length;
+  const opts = [10, 20, 30, 50, 100, 'all'].filter(n => n === 'all' || n < QUESTIONS.length);
+  const wrap = $('countChips'); wrap.innerHTML = '';
+  opts.forEach(n => {
+    const b = el('button', 'chip' + (cfg.count === n ? ' on' : ''), n === 'all' ? 'Todas (' + QUESTIONS.length + ')' : String(n));
+    b.onclick = () => { cfg.count = n; buildStart(); };
+    wrap.appendChild(b);
+  });
+  $('optShuffle').checked = cfg.shuffle;
+  const prev = load();
+  const box = $('resumeBox');
+  if (prev && !prev.finished && prev.order && prev.order.length) {
+    const done = Object.keys(prev.answers).length;
+    $('resumeInfo').textContent = done + ' de ' + prev.order.length + ' respondidas';
+    box.classList.remove('hidden');
+  } else box.classList.add('hidden');
+}
+
+function newSession(ids) {
+  S = { order: ids, answers: {}, checked: {}, revealed: {}, cur: 0, finished: false, elapsed: 0 };
+  save(); startQuiz();
+}
+
+function startFromConfig() {
+  cfg.shuffle = $('optShuffle').checked;
+  let pool = QUESTIONS.map(q => q.id);
+  const from = parseInt($('rFrom').value, 10), to = parseInt($('rTo').value, 10);
+  if (from || to) {
+    const lo = from || 1, hi = to || QUESTIONS.length;
+    if (lo > hi) return toast('El rango no es válido');
+    pool = pool.filter(id => id >= lo && id <= hi);
+    if (!pool.length) return toast('No hay preguntas en ese rango');
+  }
+  if (cfg.count !== 'all' && cfg.count < pool.length) pool = shuffle(pool).slice(0, cfg.count).sort((a, b) => a - b);
+  if (cfg.shuffle) pool = shuffle(pool);
+  newSession(pool);
+}
+
+/* ---------- Test ---------- */
+function startQuiz() {
+  show('Quiz');
+  renderQuestion();
+  clearInterval(timer);
+  timer = setInterval(() => { if (S && !S.finished) { S.elapsed++; if (S.elapsed % 10 === 0) save(); } }, 1000);
+}
+
+function updateProgress() {
+  const total = S.order.length, done = S.order.filter(id => S.answers[id] !== undefined).length;
+  $('progress').style.width = (done / total * 100) + '%';
+  $('navCount').textContent = (S.cur + 1) + '/' + total;
+}
+
+function renderQuestion() {
+  const q = qAt(S.cur), id = q.id, checked = isChecked(id), sel = S.answers[id];
+  const card = $('qCard'); card.innerHTML = '';
+
+  const head = el('div', 'qhead');
+  head.appendChild(el('span', 'badge', 'Pregunta ' + (S.cur + 1) + ' de ' + S.order.length));
+  const v = verdictOf(id);
+  if (checked) head.appendChild(el('span', 'badge ' + (v === 'ok' ? 'ok' : v === 'bad' ? 'bad' : 'muted'), v === 'ok' ? '✓ Acertada' : v === 'bad' ? '✗ Fallada' : 'Sin responder'));
+  else head.appendChild(el('span', 'badge muted', 'Nº ' + id + ' del documento'));
+  card.appendChild(head);
+  card.appendChild(el('h2', 'question', q.q));
+
+  const list = el('div', 'options'); list.setAttribute('role', 'radiogroup');
+  q.o.forEach((text, i) => {
+    const b = el('button', 'option'); b.type = 'button'; b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', sel === i);
+    let cls = '';
+    let mark = '';
+    if (checked) {
+      b.disabled = true;
+      if (i === q.a) { cls = 'correct'; mark = '✓'; }
+      else if (i === sel) { cls = 'wrong'; mark = '✗'; }
+      else cls = 'dim';
+    } else if (sel === i) cls = 'sel';
+    if (cls) b.classList.add(cls);
+    b.appendChild(el('span', 'letter', LETTERS[i]));
+    b.appendChild(el('span', 'txt', text));
+    b.appendChild(el('span', 'mark', mark));
+    b.onclick = () => selectOption(i);
+    list.appendChild(b);
+  });
+  card.appendChild(list);
+
+  const actions = el('div', 'actions');
+  const bCheck = el('button', 'btn ok', '✔ Comprobar respuesta');
+  bCheck.disabled = checked; bCheck.onclick = checkCurrent;
+  const bJust = el('button', 'btn', S.revealed[id] ? '🙈 Ocultar justificación' : '💡 Ver justificación');
+  bJust.onclick = toggleJust;
+  actions.append(bCheck, bJust);
+  card.appendChild(actions);
+
+  if (checked) {
+    const f = el('div', 'feedback ' + (v === 'ok' ? 'ok' : v === 'bad' ? 'bad' : 'warn'));
+    f.textContent = v === 'ok' ? '¡Correcto!' : v === 'bad' ? 'Incorrecto. La respuesta correcta es la ' + LETTERS[q.a] + '.' : 'No respondiste. La respuesta correcta es la ' + LETTERS[q.a] + '.';
+    card.appendChild(f);
+  }
+  if (S.revealed[id]) {
+    const j = el('div', 'just');
+    j.appendChild(el('h4', '', 'Justificación · Respuesta correcta: ' + LETTERS[q.a]));
+    j.appendChild(el('p', '', q.j));
+    card.appendChild(j);
+  }
+
+  $('btnPrev').disabled = S.cur === 0;
+  const last = S.cur === S.order.length - 1;
+  $('btnNext').textContent = last ? 'Finalizar 🏁' : 'Siguiente →';
+  updateProgress();
+  S.finished ? $('btnFinish').classList.add('hidden') : $('btnFinish').classList.remove('hidden');
+}
+
+function selectOption(i) {
+  const id = qAt(S.cur).id;
+  if (isChecked(id)) return;
+  S.answers[id] = S.answers[id] === i ? undefined : i;
+  if (S.answers[id] === undefined) delete S.answers[id];
+  save(); renderQuestion();
+}
+
+function checkCurrent() {
+  const id = qAt(S.cur).id;
+  if (S.answers[id] === undefined) return toast('Selecciona una respuesta primero');
+  S.checked[id] = true; save(); renderQuestion();
+}
+
+function toggleJust() {
+  const id = qAt(S.cur).id;
+  S.revealed[id] = !S.revealed[id]; save(); renderQuestion();
+  if (S.revealed[id]) document.querySelector('.just')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function go(i) {
+  if (i < 0 || i >= S.order.length) return;
+  S.cur = i; save(); renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function next() {
+  if (S.cur === S.order.length - 1) { if (S.finished) showResults(); else finish(); }
+  else go(S.cur + 1);
+}
+
+function finish() {
+  const blank = S.order.filter(id => S.answers[id] === undefined).length;
+  if (blank && !confirm('Tienes ' + blank + ' pregunta(s) sin responder. ¿Finalizar de todos modos?')) return;
+  S.finished = true; save(); showResults();
+}
+
+/* ---------- Índice ---------- */
+function openSheet() {
+  const g = $('gridBubbles'); g.innerHTML = '';
+  S.order.forEach((id, i) => {
+    let cls = 'bubble';
+    const a = S.answers[id];
+    if (isChecked(id) && a !== undefined) cls += a === BY_ID[id].a ? ' ok' : ' bad';
+    else if (a !== undefined) cls += ' answered';
+    if (i === S.cur) cls += ' cur';
+    const b = el('button', cls, String(i + 1)); b.title = 'Pregunta ' + (i + 1);
+    b.onclick = () => { closeSheet(); go(i); };
+    g.appendChild(b);
+  });
+  $('overlay').classList.remove('hidden');
+}
+const closeSheet = () => $('overlay').classList.add('hidden');
+
+/* ---------- Resultados ---------- */
+function showResults() {
+  show('Result');
+  const total = S.order.length;
+  const ok = S.order.filter(id => verdictOf(id) === 'ok').length;
+  const bad = S.order.filter(id => verdictOf(id) === 'bad').length;
+  const blank = total - ok - bad;
+  const pct = Math.round(ok / total * 1000) / 10;
+  const grade = (ok / total * 10).toFixed(2);
+
+  const r = 78, c = 2 * Math.PI * r, seg = n => c * n / total;
+  $('donut').innerHTML =
+    '<svg width="180" height="180" viewBox="0 0 180 180">' +
+    '<circle cx="90" cy="90" r="' + r + '" fill="none" stroke="var(--border)" stroke-width="16"/>' +
+    '<circle cx="90" cy="90" r="' + r + '" fill="none" stroke="var(--warn)" stroke-width="16" stroke-dasharray="' + seg(ok + bad + blank) + ' ' + c + '" stroke-linecap="butt"/>' +
+    '<circle cx="90" cy="90" r="' + r + '" fill="none" stroke="var(--bad)" stroke-width="16" stroke-dasharray="' + seg(ok + bad) + ' ' + c + '"/>' +
+    '<circle cx="90" cy="90" r="' + r + '" fill="none" stroke="var(--ok)" stroke-width="16" stroke-dasharray="' + seg(ok) + ' ' + c + '"/>' +
+    '</svg><div class="c"><b>' + pct + '%</b><span>de aciertos</span></div>';
+
+  $('verdict').textContent = pct >= 90 ? '🏆 ¡Excelente!' : pct >= 70 ? '👏 ¡Muy bien!' : pct >= 50 ? '👍 Aprobado, sigue repasando' : '📚 Necesitas repasar más';
+  $('timeInfo').textContent = 'Tiempo empleado: ' + fmtTime(S.elapsed || 0);
+
+  const st = $('stats4'); st.innerHTML = '';
+  [['ok', ok, 'Acertadas'], ['bad', bad, 'Falladas'], ['warn', blank, 'Sin responder'], ['pri', grade, 'Nota sobre 10']].forEach(([cls, n, label]) => {
+    const d = el('div', 'stat ' + cls); d.append(el('b', '', String(n)), el('span', '', label)); st.appendChild(d);
+  });
+  $('btnRetryWrong').disabled = ok === total;
+  tabFilter = 'all';
+  renderTabs(ok, bad, blank, total);
+  renderReview();
+  clearInterval(timer);
+}
+
+function renderTabs(ok, bad, blank, total) {
+  const t = $('tabs'); t.innerHTML = '';
+  [['all', 'Todas', total], ['bad', 'Falladas', bad], ['ok', 'Acertadas', ok], ['blank', 'Sin responder', blank]].forEach(([k, label, n]) => {
+    const b = el('button', 'tab' + (tabFilter === k ? ' on' : ''), label + ' (' + n + ')');
+    b.onclick = () => { tabFilter = k; renderTabs(ok, bad, blank, total); renderReview(); };
+    t.appendChild(b);
+  });
+}
+
+function renderReview() {
+  const list = $('reviewList'); list.innerHTML = '';
+  let shown = 0;
+  S.order.forEach((id, i) => {
+    const v = verdictOf(id);
+    if (tabFilter !== 'all' && tabFilter !== v) return;
+    shown++;
+    const q = BY_ID[id], a = S.answers[id];
+    const item = el('div', 'rev ' + v);
+    const h = el('button', 'rev-h');
+    h.append(el('span', 'n', String(i + 1)), el('span', 'q', q.q), el('span', 'chev', '▾'));
+    const b = el('div', 'rev-b hidden');
+    const l1 = el('div', 'line');
+    l1.append(el('span', 'tag ' + (v === 'ok' ? 'ok' : v === 'bad' ? 'bad' : 'warn'), v === 'ok' ? 'Acertada' : v === 'bad' ? 'Fallada' : 'Sin responder'));
+    b.appendChild(l1);
+    if (a !== undefined) { const l = el('div', 'line'); l.append(el('b', '', 'Tu respuesta: '), document.createTextNode(LETTERS[a] + ') ' + q.o[a])); b.appendChild(l); }
+    const l2 = el('div', 'line'); l2.append(el('b', '', 'Correcta: '), document.createTextNode(LETTERS[q.a] + ') ' + q.o[q.a])); b.appendChild(l2);
+    const l3 = el('div', 'line'); l3.style.color = 'var(--muted)'; l3.append(el('b', '', 'Justificación: '), document.createTextNode(q.j)); b.appendChild(l3);
+    const go1 = el('button', 'btn ghost', 'Ir a la pregunta'); go1.style.marginTop = '8px';
+    go1.onclick = () => { show('Quiz'); go(i); };
+    b.appendChild(go1);
+    h.onclick = () => { item.classList.toggle('open'); b.classList.toggle('hidden'); };
+    item.append(h, b); list.appendChild(item);
+  });
+  if (!shown) list.appendChild(el('div', 'card', 'No hay preguntas en esta categoría.'));
+}
+
+/* ---------- Eventos ---------- */
+$('btnStart').onclick = startFromConfig;
+$('btnResume').onclick = () => { S = load(); startQuiz(); };
+$('btnDiscard').onclick = () => { clear(); buildStart(); };
+$('btnPrev').onclick = () => go(S.cur - 1);
+$('btnNext').onclick = next;
+$('btnIndex').onclick = openSheet;
+$('btnGrid').onclick = openSheet;
+$('btnCloseSheet').onclick = closeSheet;
+$('overlay').onclick = e => { if (e.target === $('overlay')) closeSheet(); };
+$('btnFinish').onclick = finish;
+$('btnReview').onclick = () => { show('Quiz'); go(0); };
+$('btnNew').onclick = () => { clear(); S = null; show('Start'); buildStart(); };
+$('btnRetryWrong').onclick = () => {
+  const ids = S.order.filter(id => verdictOf(id) !== 'ok');
+  newSession(cfg.shuffle ? shuffle(ids) : ids);
+};
+
+document.addEventListener('keydown', e => {
+  if (!S || $('screenQuiz').classList.contains('hidden') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (!$('overlay').classList.contains('hidden')) { if (e.key === 'Escape') closeSheet(); return; }
+  const k = e.key.toLowerCase();
+  if (['a', 'b', 'c', 'd', '1', '2', '3', '4'].includes(k)) { const i = 'abcd'.includes(k) ? 'abcd'.indexOf(k) : +k - 1; if (!isChecked(qAt(S.cur).id)) { S.answers[qAt(S.cur).id] = i; save(); renderQuestion(); } }
+  else if (k === 'enter') { if (e.target.tagName === 'BUTTON') return; e.preventDefault(); if (!isChecked(qAt(S.cur).id)) checkCurrent(); else next(); }
+  else if (k === 'arrowright') next();
+  else if (k === 'arrowleft') go(S.cur - 1);
+  else if (k === 'j') toggleJust();
+});
+
+/* Tema */
+function setTheme(t) { document.documentElement.dataset.theme = t; $('btnTheme').textContent = t === 'dark' ? '☀️' : '🌙'; try { localStorage.setItem(KEY + '_theme', t); } catch (e) {} }
+$('btnTheme').onclick = () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+setTheme((() => { try { return localStorage.getItem(KEY + '_theme'); } catch (e) { return null; } })() || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+
+show('Start'); buildStart();
+</script>
+</body>
+</html>
